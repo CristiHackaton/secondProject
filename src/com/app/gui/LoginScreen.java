@@ -12,15 +12,12 @@ import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import javax.swing.JButton;
 
-import BussinesLogic.model.User;
-import BussinesLogic.services.UserService;
-
 public class LoginScreen extends JFrame {
 	private JTextField userName;
 	private JTextField password;
-	private UserService userService;
+//	private UserService userService;
 	public LoginScreen() {
-		userService=new UserService();
+//		userService=new UserService();
 		setTitle("Login");
 		getContentPane().setLayout(null);
 		
@@ -56,7 +53,8 @@ public class LoginScreen extends JFrame {
 			public void actionPerformed(ActionEvent arg0) {
 				String username=userName.getText();
 				String pass=password.getText();
-				User user=userService.login(userName, password);
+				com.app.db.model.User user = null;
+//				=userService.login(userName, password);
 				if(user!=null){
 					closeScreen();
 					if(user.isDoctor()){
@@ -65,11 +63,11 @@ public class LoginScreen extends JFrame {
 						docScreen.setVisible(true);
 					}else if(user.isAdmin()){
 						AdminScreen adminScreen= new AdminScreen();
-						adminScreen.setsetSize(1763,763);
+						adminScreen.setSize(1763,763);
 						adminScreen.setVisible(true);
 					}else if(user.isSecretary()){
 						SecretaryScreen secretaryScreen=new SecretaryScreen();
-						secretaryScreen.setsetSize(1763,763);
+						secretaryScreen.setSize(1763,763);
 						secretaryScreen.setVisible(true);
 						
 					}else 

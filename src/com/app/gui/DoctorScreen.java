@@ -43,7 +43,8 @@ public class DoctorScreen extends JFrame{
 	}
 private void afisareVizualizareUseri() {
 		
-		list = new JList(new PatientListModel(consultationService.getAllConsultations()));//creare lista de pacienti
+		//list = new JList(new PatientListModel(consultationService.getAllConsultations()));//creare lista de pacienti
+	list = new JList();
 		 listPanel = new JScrollPane(list);
 		listPanel.setBounds(10, 10, 320,500);
 		panelVizualizare.add(listPanel);
@@ -63,8 +64,8 @@ private void afisareVizualizareUseri() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 		
-			consultationService.addConsultation((Consultation) list.getSelectedValue());
-			list.setListData(consultationService.getAllConsultations().toArray());
+//			consultationService.addConsultation((Consultation) list.getSelectedValue());
+//			list.setListData(consultationService.getAllConsultations().toArray());
 			
 		
 			
