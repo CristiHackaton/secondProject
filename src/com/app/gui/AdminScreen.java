@@ -24,6 +24,7 @@ public class AdminScreen extends JFrame{
 	private AdminService adminServ;
 	private boolean isNew=false;
 	private int id;
+	private User loggedUser;
 	//private UserService userServ;
 	public AdminScreen() {
 		setBounds(new Rectangle(0, 0, 777, 1777));
@@ -38,7 +39,7 @@ public class AdminScreen extends JFrame{
 		scrollPane.setBounds(10, 10, 96, 161);
 		panel.add(scrollPane);
 		
-		final JList list = new JList(new UserListModel(adminServ.getAllUsers()));
+		final JList list = new JList(new UserListModel(adminServ.getAllUsers(loggedUser)));
 		scrollPane.add(list);
 		list.setBounds(10, 10, 85, 151);
 		
@@ -158,10 +159,10 @@ public class AdminScreen extends JFrame{
 					u.setUserType(2);
 				}
 				if(isNew){
-					adminServ.createUser(u);
+					adminServ.createUser(loggedUser,u);
 				}else {
 					u.setUserID(id);
-					adminServ.updateUser(u);
+					adminServ.updateUser(loggedUser,u);
 				}
 				((UserListModel)list.getModel()).getListaUseri().add(u);
 				btnSave.setVisible(false);
@@ -174,7 +175,7 @@ public class AdminScreen extends JFrame{
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
 				User u=(User)list.getSelectedValue();
-				adminServ.deleteUser(u);
+				adminServ.deleteUser(loggedUser,u);
 				
 				
 			}
@@ -182,6 +183,9 @@ public class AdminScreen extends JFrame{
 		});
 
 	}
-	
+	public void setLoggedUser(User user) {
+		this.loggedUser = user;
+		
+	}
 
 }

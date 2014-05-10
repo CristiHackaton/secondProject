@@ -11,6 +11,7 @@ import javax.swing.JScrollPane;
 
 
 
+import com.app.db.model.User;
 import com.app.service.DoctorService;
 
 import java.awt.Color;
@@ -21,6 +22,7 @@ public class DoctorScreen extends JFrame{
 	private JScrollPane listPanel;
 	private JPanel panelVizualizare;
 	private JList list;
+	private User loggedUser;
 	public DoctorScreen() {
 		setTitle("Welcome Doctor!");
 		getContentPane().setLayout(null);
@@ -46,7 +48,7 @@ public class DoctorScreen extends JFrame{
 	}
 private void afisareVizualizareConsultatii() {
 	DoctorService docServ=new DoctorService();
-	list = new JList(new PatientListModel(docServ.getAllPatients()));//creare lista de pacienti
+	list = new JList(new PatientListModel(docServ.getAllPatients(loggedUser)));//creare lista de pacienti
 	list = new JList();
 		 listPanel = new JScrollPane(list);
 		listPanel.setBounds(10, 10, 320,500);
@@ -74,5 +76,9 @@ private void afisareVizualizareConsultatii() {
 ////			
 ////			}
 //		});
+}
+public void setLoggedUser(User user) {
+	this.loggedUser = user;
+	
 }
 }

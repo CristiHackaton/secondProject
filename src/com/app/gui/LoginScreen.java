@@ -61,14 +61,17 @@ public class LoginScreen extends JFrame {
 					closeScreen();
 					if(user.isDoctor()){
 						DoctorScreen docScreen=new DoctorScreen();
+						docScreen.setLoggedUser(user);
 						docScreen.setSize(1763,763);
 						docScreen.setVisible(true);
 					}else if(user.isAdmin()){
 						AdminScreen adminScreen= new AdminScreen();
+						adminScreen.setLoggedUser(user);
 						adminScreen.setSize(1763,763);
 						adminScreen.setVisible(true);
 					}else if(user.isSecretary()){
 						SecretaryScreen secretaryScreen=new SecretaryScreen();
+						secretaryScreen.setLoggedUser(user);
 						secretaryScreen.setSize(1763,763);
 						secretaryScreen.setVisible(true);
 						
