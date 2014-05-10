@@ -7,7 +7,8 @@ import com.app.db.model.User;
 public class SecretaryScreen extends JFrame{
 	private User loggedUser;
 
-	public SecretaryScreen() {
+	public SecretaryScreen(User user) {
+		loggedUser = user;
 	}
 
 	public void setLoggedUser(User user) {

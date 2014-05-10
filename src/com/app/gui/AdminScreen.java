@@ -26,7 +26,9 @@ public class AdminScreen extends JFrame{
 	private int id;
 	private User loggedUser;
 	//private UserService userServ;
-	public AdminScreen() {
+	public AdminScreen(User user) {
+		loggedUser = user;
+		adminServ = new AdminService();
 		setBounds(new Rectangle(0, 0, 777, 1777));
 		getContentPane().setLayout(null);
 		

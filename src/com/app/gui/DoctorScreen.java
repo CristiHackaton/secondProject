@@ -23,7 +23,8 @@ public class DoctorScreen extends JFrame{
 	private JPanel panelVizualizare;
 	private JList list;
 	private User loggedUser;
-	public DoctorScreen() {
+	public DoctorScreen(User user) {
+		loggedUser = user;
 		setTitle("Welcome Doctor!");
 		getContentPane().setLayout(null);
 		
