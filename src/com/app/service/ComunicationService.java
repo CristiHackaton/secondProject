@@ -49,7 +49,7 @@ public class ComunicationService {
 		}
 	}
 
-	public void sendRequest(SocketRequest request) {
+	public SocketRequest sendRequest(SocketRequest request) {
 		createSocket();
 		try {
 			ObjectOutputStream out = new ObjectOutputStream(
@@ -58,15 +58,16 @@ public class ComunicationService {
 			out.flush();
 			System.out.println("client>" + request);
 			if (request.isNeedsResponse()) {
-				getResponse(request);
+				return getResponse(request);
 			}
 		} catch (IOException ioException) {
 			ioException.printStackTrace();
 		}
+		return null;
 //		closeSocket();
 	}
 
-	private void getResponse(SocketRequest request) {
+	private SocketRequest getResponse(SocketRequest request) {
 		System.out.println("client awaits for response");
 		
 		try {
@@ -75,7 +76,8 @@ public class ComunicationService {
 
 			SocketRequest sock = (SocketRequest) in.readObject();
 			System.out.println(sock.getUser().getUsername());
-			parseResponse(sock);
+			SocketRequest response = parseResponse(sock);
+			return response;
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -83,11 +85,11 @@ public class ComunicationService {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-
+		return null;
 	}
 
-	private void parseResponse(SocketRequest sock) {
+	private SocketRequest parseResponse(SocketRequest sock) {
 		// TODO Auto-generated method stub
-		
+		return null;
 	}
 }
