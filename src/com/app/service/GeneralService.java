@@ -16,6 +16,5 @@ public class GeneralService {
 		SocketRequest response = com.sendRequest(sockReq);
 		return (User) response.getParameter();	
 	}
-	
-	
+
 }

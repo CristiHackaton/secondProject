@@ -75,9 +75,7 @@ public class ComunicationService {
 					requestSocket.getInputStream());
 
 			SocketRequest sock = (SocketRequest) in.readObject();
-			System.out.println(sock.getUser().getUsername());
-			SocketRequest response = parseResponse(sock);
-			return response;
+			return sock;
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
