@@ -12,12 +12,15 @@ import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import javax.swing.JButton;
 
+import com.app.db.model.User;
+import com.app.service.GeneralService;
+
 public class LoginScreen extends JFrame {
 	private JTextField userName;
 	private JTextField password;
-//	private UserService userService;
+	private GeneralService genService;
 	public LoginScreen() {
-//		userService=new UserService();
+		genService=new GeneralService();
 		setTitle("Login");
 		getContentPane().setLayout(null);
 		
@@ -53,8 +56,7 @@ public class LoginScreen extends JFrame {
 			public void actionPerformed(ActionEvent arg0) {
 				String username=userName.getText();
 				String pass=password.getText();
-				com.app.db.model.User user = null;
-//				=userService.login(userName, password);
+				User user =genService.login(username, pass);
 				if(user!=null){
 					closeScreen();
 					if(user.isDoctor()){

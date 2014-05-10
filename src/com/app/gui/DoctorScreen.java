@@ -10,6 +10,9 @@ import javax.swing.JScrollPane;
 
 
 
+
+import com.app.service.DoctorService;
+
 import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -41,9 +44,9 @@ public class DoctorScreen extends JFrame{
 		list.setBounds(10, 51, 138, 165);
 		panel.add(list);
 	}
-private void afisareVizualizareUseri() {
-		
-		//list = new JList(new PatientListModel(consultationService.getAllConsultations()));//creare lista de pacienti
+private void afisareVizualizareConsultatii() {
+	DoctorService docServ=new DoctorService();
+	list = new JList(new PatientListModel(docServ.getAllPatients()));//creare lista de pacienti
 	list = new JList();
 		 listPanel = new JScrollPane(list);
 		listPanel.setBounds(10, 10, 320,500);
@@ -57,19 +60,19 @@ private void afisareVizualizareUseri() {
 		
 		panel.setLayout(null);
 		panelVizualizare.add(panel);
-		JButton butonStergeUser = new JButton("Sterge User");
-		butonStergeUser.setBounds(0, 0, 135, 23);
-		butonStergeUser.addActionListener(new ActionListener() {
-		
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-		
-//			consultationService.addConsultation((Consultation) list.getSelectedValue());
-//			list.setListData(consultationService.getAllConsultations().toArray());
-			
-		
-			
-			}
-		});
+////		JButton butonStergeUser = new JButton("");
+////		butonStergeUser.setBounds(0, 0, 135, 23);
+////		butonStergeUser.addActionListener(new ActionListener() {
+////		
+////			@Override
+////			public void actionPerformed(ActionEvent arg0) {
+////		
+//////			consultationService.addConsultation((Consultation) list.getSelectedValue());
+//////			list.setListData(consultationService.getAllConsultations().toArray());
+////			
+////		
+////			
+////			}
+//		});
 }
 }
