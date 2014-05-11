@@ -11,15 +11,23 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 
 import com.app.db.model.Consultation;
+import com.app.db.model.Pacient;
 import com.app.db.model.User;
 import com.app.service.SecretaryService;
+
 import javax.swing.JMenuBar;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextArea;
+
 import java.awt.ScrollPane;
 import java.awt.List;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class SecretaryScreen extends JFrame{
 	private User loggedUser;
@@ -36,8 +44,11 @@ public class SecretaryScreen extends JFrame{
 	private JTextField doctor;
 	private JList listConsult;
 	private JList listPatient;
-
+	private int id;
+	private boolean isNew=false;
 	public SecretaryScreen(User user) {
+		
+		secretServ=new SecretaryService();
 		setTitle("Secretary");
 		getContentPane().setBounds(new Rectangle(10, 10, 770, 1777));
 		getContentPane().setLayout(null);
@@ -91,7 +102,7 @@ public class SecretaryScreen extends JFrame{
 		notes.setBounds(84, 148, 109, 64);
 		panelConsultations.add(notes);
 		
-		listConsult = new JList(new ConsultaionModel(secretServ.getAllConsultations()));
+		listConsult = new JList(new ConsultationListModel(secretServ.getAllConsultations(loggedUser)));
 
 		listConsult.setBounds(341, 22, 96, 164);
 		
@@ -100,6 +111,7 @@ public class SecretaryScreen extends JFrame{
 		panelConsultations.add(scrollPaneCons);
 		
 		
+		/////////////**************************************************/////////////////////
 		JPanel panelPatient = new JPanel();
 		panelPatient.setBounds(0, 0, 365, 251);
 		getContentPane().add(panelPatient);
@@ -150,7 +162,7 @@ public class SecretaryScreen extends JFrame{
 		panelPatient.add(namePatient);
 		namePatient.setColumns(10);
 		
-		listPatient = new JList(new PatientListModel(secretServ.()));
+		listPatient = new JList(new PatientListModel(secretServ.getAllPatients(loggedUser)));
 
 		listPatient.setBounds(346, 171, 89, 158);
 		
@@ -158,9 +170,14 @@ public class SecretaryScreen extends JFrame{
 		scrollPanePatient.setBounds(346, 171, 89, 158);
 		panelPatient.add(scrollPanePatient);
 		
+		JButton btnSchedule = new JButton("Schedule");
+		btnSchedule.setBounds(224, 18, 89, 23);
+		panelPatient.add(btnSchedule);
+		
+		
 		JMenuBar menuBar = new JMenuBar();
 		setJMenuBar(menuBar);
-		
+		///////////**********Menu Patients******************/////////////////////
 		JMenu mnPatients = new JMenu("Patients");
 		menuBar.add(mnPatients);
 		
@@ -175,6 +192,67 @@ public class SecretaryScreen extends JFrame{
 		
 		JMenuItem mntmSave = new JMenuItem("Save");
 		mnPatients.add(mntmSave);
+		
+		mntmAdd.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				// TODO Auto-generated method stub
+				Pacient p=new Pacient();
+				
+				namePatient.getText();
+			}
+		});
+		mntmViewAllPat.addActionListener(new ActionListener() {
+		
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				listPatient.setVisible(true);
+			}
+		});
+		
+		
+		mntmUpdatePat.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				Pacient p=(Pacient) listPatient.getSelectedValue();
+				namePatient.setText(p.getName());
+				cnp.setText(p.getCnp());
+				idCard.setText(p.getIdentitiCard());
+				adress.setText(p.getAddress());
+				SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd");
+				String date = DATE_FORMAT.format(p.getBirth());
+		        birth.setText(date);
+				
+				isNew=false;
+				id=p.getId();
+				
+			}
+		});
+		mntmSave.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				Pacient p=new Pacient();
+				SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd");
+				Date date=null;
+				try {
+					date = DATE_FORMAT.parse(birth.getText());
+				} catch (ParseException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+				p.setAddress(adress.getText());
+				p.setBirth(date);
+				p.setCnp(cnp.getText());
+				
+			}
+		});
+		///////////************Menu Consultations******************///////////////////
 		
 		JMenu mnConsultations = new JMenu("Consultations");
 		menuBar.add(mnConsultations);
@@ -200,6 +278,9 @@ public class SecretaryScreen extends JFrame{
 		JMenuItem mntmLogOut = new JMenuItem("Log out");
 		mnOptions.add(mntmLogOut);
 		loggedUser = user;
+		/////////////*******************************/////////////////
+		
+		
 	}
 
 	public void setLoggedUser(User user) {
