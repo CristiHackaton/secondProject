@@ -2,6 +2,7 @@ package com.app.gui;
 
 import java.awt.Rectangle;
 
+import javax.crypto.spec.OAEPParameterSpec;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -47,11 +48,15 @@ public class SecretaryScreen extends JFrame{
 	private JList listPatient;
 	private JList listDoc;
 	private JTextArea notes;
+	private JScrollPane scrollPaneCons;
+	private JScrollPane scrollPaneDoc;
+	private JScrollPane scrollPanePatient;
 	private JPanel panelConsultations;
 	private JPanel panelPatient;
 	private JButton btnSchedule;
 	private int id;
 	private boolean isNew=false;
+	private int idCons;
 	private Pacient selectedPacient;
 	public SecretaryScreen(User user) {
 		
@@ -102,7 +107,12 @@ public class SecretaryScreen extends JFrame{
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
-				listPatient.setVisible(true);
+				panelPatient.setVisible(true);
+				panelConsultations.setVisible(false);
+				panelConsultations.repaint();
+				panelConsultations.revalidate();
+				panelPatient.repaint();
+				panelPatient.revalidate();
 			}
 		});
 		
@@ -151,20 +161,12 @@ public class SecretaryScreen extends JFrame{
 				}else {p.setId(id);
 					secretServ.updatePacient(loggedUser, p);
 				}
-			btnSchedule.addActionListener(new ActionListener() {
-				
-				@Override
-				public void actionPerformed(ActionEvent e) {
-					// TODO Auto-generated method stub
-					selectedPacient=(Pacient) listPatient.getSelectedValue();
-					panelPatient.setVisible(false);
-					panelConsultations.setVisible(true);
-				}
-			});	
+				cleanAndRedraw();
 			}
 			
 		});
 		///////////************Menu Consultations******************///////////////////
+			
 		
 		JMenu mnConsultations = new JMenu("Consultations");
 		menuBar.add(mnConsultations);
@@ -199,6 +201,8 @@ public class SecretaryScreen extends JFrame{
 				panelConsultations.setVisible(true);
 				panelConsultations.repaint();
 				panelConsultations.revalidate();
+				panelPatient.repaint();
+				panelPatient.revalidate();
 				listConsult.setVisible(true);
 				getContentPane().repaint();
 				getContentPane().revalidate();
@@ -210,13 +214,19 @@ public class SecretaryScreen extends JFrame{
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				// TODO Auto-generated method stub
+				panelConsultations.setVisible(false);
+				panelPatient.setVisible(true);
+				panelConsultations.repaint();
+				panelConsultations.revalidate();
+				panelPatient.repaint();
+				panelPatient.revalidate();
 				isNew=true;
 				patient.setText("");
 				date.setText("");
 				duration.setText("");
 				doctor.setText("");
 				notes.setText("");
-				
+		
 			}
 		});
 		mntmDelete.addActionListener(new ActionListener() {
@@ -228,29 +238,56 @@ public class SecretaryScreen extends JFrame{
 				secretServ.deleteConsultation(loggedUser, cons);
 			}
 		});
+		mntmUpdateCons.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				Consultation consult = (Consultation) listConsult.getSelectedValue();
+				isNew=false;
+				idCons= consult.getId();
+				patient.setText(consult.getPacient().getName());
+				
+				SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd");
+				String dateTo = DATE_FORMAT.format(consult.getConsultationDate());
+				
+				date.setText(dateTo);
+				duration.setText(consult.getDuration() + "");
+				doctor.setText(consult.getDoctor().getUsername());
+				notes.setText(consult.getNotes());
+				
+			}
+		});
 		mntmSave_1.addActionListener(new ActionListener() {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
-				listDoc.setVisible(true);
 				Consultation c=new Consultation();
 				SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd");
-				Date date=null;
+				Date datecomp=null;
 				try {
-					date = DATE_FORMAT.parse(birth.getText());
+					datecomp = DATE_FORMAT.parse(date.getText());
 				} catch (ParseException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
 				c.setPacient(selectedPacient); 
 				c.setDuration(Float.parseFloat(duration.getText()));
-				c.setConsultationDate(date);
+				c.setConsultationDate(datecomp);
 				c.setDoctor((Doctor) listDoc.getSelectedValue());
 				c.setNotes(notes.getText());
-				
-				
+				if (isNew){
+					secretServ.createConsultation(loggedUser, c);
+				}else {
+					c.setId(idCons);
+					secretServ.updateConsultation(loggedUser, c);
+				}
 				cleanAndRedraw();
+				date.setText("");
+				duration.setText("");
+				patient.setText("");
+				notes.setText("");
+				doctor.setText("");
 			}
 
 				
@@ -270,7 +307,7 @@ public class SecretaryScreen extends JFrame{
 	
 		
 		panelConsultations = new JPanel();
-		panelConsultations.setBounds(15, 15, 365, 301);
+		panelConsultations.setBounds(15, 15, 1200, 600);
 		getContentPane().add(panelConsultations);
 		panelConsultations.setLayout(null);
 		
@@ -322,18 +359,18 @@ public class SecretaryScreen extends JFrame{
 
 		listConsult.setBounds(341, 22, 96, 164);
 		
-		JScrollPane scrollPaneCons = new JScrollPane(listConsult);
+		scrollPaneCons = new JScrollPane(listConsult);
 		scrollPaneCons.setBounds(341, 22, 96, 164);
 		panelConsultations.add(scrollPaneCons);
 		
 		listDoc= new JList(new DoctorListModel(secretServ.getAllDoctors(loggedUser)));
 
-		listDoc.setBounds(341, 22, 96, 164);
+		listDoc.setBounds(10, 10, 96, 164);
 		
-		JScrollPane scrollPaneDoc = new JScrollPane(listDoc);
-		scrollPaneDoc.setBounds(341, 22, 96, 164);
-		panelConsultations.add(scrollPaneCons);
-		
+		scrollPaneDoc = new JScrollPane(listDoc);
+		scrollPaneDoc.setBounds(441, 22, 96, 164);
+		panelConsultations.add(scrollPaneDoc);
+		scrollPaneDoc.setVisible(true);
 		
 		
 		
@@ -341,7 +378,7 @@ public class SecretaryScreen extends JFrame{
 		
 		
 		panelPatient = new JPanel();
-		panelPatient.setBounds(25, 25, 365, 251);
+		panelPatient.setBounds(25, 25,600, 600);
 		getContentPane().add(panelPatient);
 		panelPatient.setLayout(null);
 		
@@ -389,12 +426,16 @@ public class SecretaryScreen extends JFrame{
 		namePatient.setBounds(93, 54, 86, 20);
 		panelPatient.add(namePatient);
 		namePatient.setColumns(10);
+//		
+//		cnp.setEditable(false);
+//		idCard.setEditable(false);
+//		birth.setEditable(false);
 		
 		listPatient = new JList(new PatientListModel(secretServ.getAllPatients(loggedUser)));
 
 		listPatient.setBounds(346, 171, 89, 158);
 		
-		JScrollPane scrollPanePatient = new JScrollPane();
+		scrollPanePatient = new JScrollPane(listPatient);
 		scrollPanePatient.setBounds(346, 171, 89, 158);
 		panelPatient.add(scrollPanePatient);
 		
@@ -402,12 +443,69 @@ public class SecretaryScreen extends JFrame{
 		btnSchedule.setBounds(224, 18, 89, 23);
 		panelPatient.add(btnSchedule);
 		loggedUser = user;
+btnSchedule.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				selectedPacient=(Pacient) listPatient.getSelectedValue();
+				listPatient.setSelectedValue(selectedPacient, true);
+				panelPatient.setVisible(false);
+				panelConsultations.setVisible(true);
+				panelPatient.repaint();
+				panelConsultations.repaint();
+				panelConsultations.revalidate();
+				panelPatient.revalidate();
+			}
+		});
+		
+		panelPatient.setVisible(false);
+		panelConsultations.setVisible(false);
+		panelConsultations.repaint();
+		panelConsultations.revalidate();
+		panelPatient.repaint();
+		panelPatient.revalidate();
+		listConsult.setVisible(true);
+		listDoc.setVisible(true);
 	}
 	private void cleanAndRedraw() {
+		panelConsultations.remove(scrollPaneCons);
+		panelPatient.remove(scrollPanePatient);
+		panelConsultations.remove(scrollPaneDoc);
+		listConsult = new JList(new ConsultationListModel(secretServ.getAllConsultations(loggedUser)));
+
+		listConsult.setBounds(341, 22, 96, 164);
+		
+		scrollPaneCons = new JScrollPane(listConsult);
+		scrollPaneCons.setBounds(341, 22, 96, 164);
+		panelConsultations.add(scrollPaneCons);
+		
+		listDoc= new JList(new DoctorListModel(secretServ.getAllDoctors(loggedUser)));
+
+		listDoc.setBounds(10, 10, 96, 164);
+		
+		scrollPaneDoc = new JScrollPane(listDoc);
+		scrollPaneDoc.setBounds(441, 22, 96, 164);
+		panelConsultations.add(scrollPaneDoc);
+		scrollPaneDoc.setVisible(true);
+
+		listPatient = new JList(new PatientListModel(secretServ.getAllPatients(loggedUser)));
+
+		listPatient.setBounds(346, 171, 89, 158);
+		
+		scrollPanePatient = new JScrollPane(listPatient);
+		scrollPanePatient.setBounds(346, 171, 89, 158);
+		panelPatient.add(scrollPanePatient);
+		
 		getContentPane().setVisible(false);
 		getContentPane().repaint();
 		getContentPane().revalidate();
-
+		panelConsultations.repaint();
+		panelConsultations.revalidate();
+		panelPatient.repaint();
+		panelPatient.revalidate();
+		
+		
 	
 		//initComponents(loggedUser);
 		//refreshPage();		
