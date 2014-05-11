@@ -72,5 +72,7 @@ public class User implements Model{
 	}else return false;
 }
     
-    
+    public String toString(){
+    	return username;
+    }
 }

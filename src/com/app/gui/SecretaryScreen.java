@@ -61,145 +61,11 @@ public class SecretaryScreen extends JFrame{
 		getContentPane().setBounds(new Rectangle(10, 10, 770, 1777));
 		getContentPane().setLayout(null);
 		this.setVisible(true);
-	
-		
-		panelConsultations = new JPanel();
-		panelConsultations.setBounds(15, 15, 365, 301);
-		getContentPane().add(panelConsultations);
-		panelConsultations.setLayout(null);
-		
-		JLabel lblName = new JLabel("Patient");
-		lblName.setBounds(10, 22, 46, 14);
-		panelConsultations.add(lblName);
-		
-		JLabel lblDuration = new JLabel("Duration");
-		lblDuration.setBounds(10, 73, 46, 14);
-		panelConsultations.add(lblDuration);
-		
-		JLabel lblDate = new JLabel("Date");
-		lblDate.setBounds(10, 48, 46, 14);
-		panelConsultations.add(lblDate);
-		
-		patient = new JTextField();
-		patient.setBounds(84, 19, 86, 20);
-		panelConsultations.add(patient);
-		patient.setColumns(10);
-		
-		date = new JTextField();
-		date.setBounds(84, 45, 86, 20);
-		panelConsultations.add(date);
-		date.setColumns(10);
-		
-		duration = new JTextField();
-		duration.setBounds(84, 70, 86, 20);
-		panelConsultations.add(duration);
-		duration.setColumns(10);
-		
-		JLabel lblDoctor = new JLabel("Doctor");
-		lblDoctor.setBounds(10, 120, 46, 14);
-		panelConsultations.add(lblDoctor);
-		
-		doctor = new JTextField();
-		doctor.setBounds(84, 117, 86, 20);
-		panelConsultations.add(doctor);
-		doctor.setColumns(10);
-		
-		JLabel lblNewLabel = new JLabel("Notes");
-		lblNewLabel.setBounds(10, 158, 46, 14);
-		panelConsultations.add(lblNewLabel);
-		
-		notes = new JTextArea();
-		notes.setBounds(84, 148, 109, 64);
-		panelConsultations.add(notes);
-		
-		listConsult = new JList(new ConsultationListModel(secretServ.getAllConsultations(loggedUser)));
-
-		listConsult.setBounds(341, 22, 96, 164);
-		
-		JScrollPane scrollPaneCons = new JScrollPane(listConsult);
-		scrollPaneCons.setBounds(341, 22, 96, 164);
-		panelConsultations.add(scrollPaneCons);
-		
-		listDoc= new JList(new DoctorListModel(secretServ.getAllDoctors(loggedUser)));
-
-		listDoc.setBounds(341, 22, 96, 164);
-		
-		JScrollPane scrollPaneDoc = new JScrollPane(listDoc);
-		scrollPaneDoc.setBounds(341, 22, 96, 164);
-		panelConsultations.add(scrollPaneCons);
-		
-		
-		
-		
-		/////////////**************************************************/////////////////////
-		
-		
-		panelPatient = new JPanel();
-		panelPatient.setBounds(15, 15, 365, 251);
-		getContentPane().add(panelPatient);
-		panelPatient.setLayout(null);
-		
-		JLabel lblCnp = new JLabel("CNP");
-		lblCnp.setBounds(10, 86, 46, 14);
-		panelPatient.add(lblCnp);
-		
-		JLabel lblNume = new JLabel("Name");
-		lblNume.setBounds(10, 59, 46, 14);
-		panelPatient.add(lblNume);
-		
-		JLabel lblDateOfBirth = new JLabel("Date of Birth");
-		lblDateOfBirth.setBounds(10, 111, 61, 14);
-		panelPatient.add(lblDateOfBirth);
-		
-		JLabel lblAddress = new JLabel("Address");
-		lblAddress.setBounds(10, 157, 46, 14);
-		panelPatient.add(lblAddress);
-		
-		JLabel lblIdentityCard = new JLabel("Identity Card");
-		lblIdentityCard.setBounds(10, 132, 76, 14);
-		panelPatient.add(lblIdentityCard);
-		
-		cnp = new JTextField();
-		cnp.setBounds(95, 81, 86, 20);
-		panelPatient.add(cnp);
-		cnp.setColumns(10);
-		
-		idCard = new JTextField();
-		idCard.setBounds(95, 128, 86, 20);
-		panelPatient.add(idCard);
-		idCard.setColumns(10);
-		
-		birth = new JTextField();
-		birth.setBounds(94, 105, 86, 20);
-		panelPatient.add(birth);
-		birth.setColumns(10);
-		
-		adress = new JTextField();
-		adress.setBounds(96, 154, 86, 20);
-		panelPatient.add(adress);
-		adress.setColumns(10);
-		
-		namePatient = new JTextField();
-		namePatient.setBounds(93, 54, 86, 20);
-		panelPatient.add(namePatient);
-		namePatient.setColumns(10);
-		
-		listPatient = new JList(new PatientListModel(secretServ.getAllPatients(loggedUser)));
-
-		listPatient.setBounds(346, 171, 89, 158);
-		
-		JScrollPane scrollPanePatient = new JScrollPane();
-		scrollPanePatient.setBounds(346, 171, 89, 158);
-		panelPatient.add(scrollPanePatient);
-		
-		btnSchedule = new JButton("Schedule");
-		btnSchedule.setBounds(224, 18, 89, 23);
-		panelPatient.add(btnSchedule);
 		
 		
 		JMenuBar menuBar = new JMenuBar();
-		setJMenuBar(menuBar);
-		menuBar.setVisible(true);
+		menuBar.setBounds(0, 0, 434, 21);
+		getContentPane().add(menuBar);
 		
 		///////////**********Menu Patients******************/////////////////////
 		JMenu mnPatients = new JMenu("Patients");
@@ -323,14 +189,19 @@ public class SecretaryScreen extends JFrame{
 		
 		JMenuItem mntmLogOut = new JMenuItem("Log out");
 		mnOptions.add(mntmLogOut);
-		loggedUser = user;
 		/////////////*******************************/////////////////
 		mntmViewAllCons.addActionListener(new ActionListener() {
 			
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				// TODO Auto-generated method stub
+				panelPatient.setVisible(false);
+				panelConsultations.setVisible(true);
+				panelConsultations.repaint();
+				panelConsultations.revalidate();
 				listConsult.setVisible(true);
+				getContentPane().repaint();
+				getContentPane().revalidate();
 				
 			}
 		});
@@ -396,6 +267,141 @@ public class SecretaryScreen extends JFrame{
 				cleanAndRedraw();
 			}
 		});
+	
+		
+		panelConsultations = new JPanel();
+		panelConsultations.setBounds(15, 15, 365, 301);
+		getContentPane().add(panelConsultations);
+		panelConsultations.setLayout(null);
+		
+		JLabel lblName = new JLabel("Patient");
+		lblName.setBounds(10, 22, 46, 14);
+		panelConsultations.add(lblName);
+		
+		JLabel lblDuration = new JLabel("Duration");
+		lblDuration.setBounds(10, 73, 46, 14);
+		panelConsultations.add(lblDuration);
+		
+		JLabel lblDate = new JLabel("Date");
+		lblDate.setBounds(10, 48, 46, 14);
+		panelConsultations.add(lblDate);
+		
+		patient = new JTextField();
+		patient.setBounds(84, 19, 86, 20);
+		panelConsultations.add(patient);
+		patient.setColumns(10);
+		
+		date = new JTextField();
+		date.setBounds(84, 45, 86, 20);
+		panelConsultations.add(date);
+		date.setColumns(10);
+		
+		duration = new JTextField();
+		duration.setBounds(84, 70, 86, 20);
+		panelConsultations.add(duration);
+		duration.setColumns(10);
+		
+		JLabel lblDoctor = new JLabel("Doctor");
+		lblDoctor.setBounds(10, 120, 46, 14);
+		panelConsultations.add(lblDoctor);
+		
+		doctor = new JTextField();
+		doctor.setBounds(84, 117, 86, 20);
+		panelConsultations.add(doctor);
+		doctor.setColumns(10);
+		
+		JLabel lblNewLabel = new JLabel("Notes");
+		lblNewLabel.setBounds(10, 158, 46, 14);
+		panelConsultations.add(lblNewLabel);
+		
+		notes = new JTextArea();
+		notes.setBounds(84, 148, 109, 64);
+		panelConsultations.add(notes);
+		
+		listConsult = new JList(new ConsultationListModel(secretServ.getAllConsultations(loggedUser)));
+
+		listConsult.setBounds(341, 22, 96, 164);
+		
+		JScrollPane scrollPaneCons = new JScrollPane(listConsult);
+		scrollPaneCons.setBounds(341, 22, 96, 164);
+		panelConsultations.add(scrollPaneCons);
+		
+		listDoc= new JList(new DoctorListModel(secretServ.getAllDoctors(loggedUser)));
+
+		listDoc.setBounds(341, 22, 96, 164);
+		
+		JScrollPane scrollPaneDoc = new JScrollPane(listDoc);
+		scrollPaneDoc.setBounds(341, 22, 96, 164);
+		panelConsultations.add(scrollPaneCons);
+		
+		
+		
+		
+		/////////////**************************************************/////////////////////
+		
+		
+		panelPatient = new JPanel();
+		panelPatient.setBounds(25, 25, 365, 251);
+		getContentPane().add(panelPatient);
+		panelPatient.setLayout(null);
+		
+		JLabel lblCnp = new JLabel("CNP");
+		lblCnp.setBounds(10, 86, 46, 14);
+		panelPatient.add(lblCnp);
+		
+		JLabel lblNume = new JLabel("Name");
+		lblNume.setBounds(10, 59, 46, 14);
+		panelPatient.add(lblNume);
+		
+		JLabel lblDateOfBirth = new JLabel("Date of Birth");
+		lblDateOfBirth.setBounds(10, 111, 61, 14);
+		panelPatient.add(lblDateOfBirth);
+		
+		JLabel lblAddress = new JLabel("Address");
+		lblAddress.setBounds(10, 157, 46, 14);
+		panelPatient.add(lblAddress);
+		
+		JLabel lblIdentityCard = new JLabel("Identity Card");
+		lblIdentityCard.setBounds(10, 132, 76, 14);
+		panelPatient.add(lblIdentityCard);
+		
+		cnp = new JTextField();
+		cnp.setBounds(95, 81, 86, 20);
+		panelPatient.add(cnp);
+		cnp.setColumns(10);
+		
+		idCard = new JTextField();
+		idCard.setBounds(95, 128, 86, 20);
+		panelPatient.add(idCard);
+		idCard.setColumns(10);
+		
+		birth = new JTextField();
+		birth.setBounds(94, 105, 86, 20);
+		panelPatient.add(birth);
+		birth.setColumns(10);
+		
+		adress = new JTextField();
+		adress.setBounds(96, 154, 86, 20);
+		panelPatient.add(adress);
+		adress.setColumns(10);
+		
+		namePatient = new JTextField();
+		namePatient.setBounds(93, 54, 86, 20);
+		panelPatient.add(namePatient);
+		namePatient.setColumns(10);
+		
+		listPatient = new JList(new PatientListModel(secretServ.getAllPatients(loggedUser)));
+
+		listPatient.setBounds(346, 171, 89, 158);
+		
+		JScrollPane scrollPanePatient = new JScrollPane();
+		scrollPanePatient.setBounds(346, 171, 89, 158);
+		panelPatient.add(scrollPanePatient);
+		
+		btnSchedule = new JButton("Schedule");
+		btnSchedule.setBounds(224, 18, 89, 23);
+		panelPatient.add(btnSchedule);
+		loggedUser = user;
 	}
 	private void cleanAndRedraw() {
 		getContentPane().setVisible(false);
