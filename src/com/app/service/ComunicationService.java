@@ -51,6 +51,7 @@ public class ComunicationService {
 
 	public SocketRequest sendRequest(SocketRequest request) {
 		createSocket();
+		System.out.println(">>>>>>>> " + request.getTypeOfRequest() + "<<<<<<<<");
 		try {
 			ObjectOutputStream out = new ObjectOutputStream(
 					requestSocket.getOutputStream());

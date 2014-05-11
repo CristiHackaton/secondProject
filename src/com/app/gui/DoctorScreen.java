@@ -50,7 +50,6 @@ public class DoctorScreen extends JFrame{
 private void afisareVizualizareConsultatii() {
 	DoctorService docServ=new DoctorService();
 	list = new JList(new PatientListModel(docServ.getAllPatients(loggedUser)));//creare lista de pacienti
-	list = new JList();
 		 listPanel = new JScrollPane(list);
 		listPanel.setBounds(10, 10, 320,500);
 		panelVizualizare.add(listPanel);

@@ -11,15 +11,17 @@ import com.app.db.model.User;
 public class DoctorService extends GeneralService{
 	public void addConsultation(User loggedInUser,Consultation consultation){
 		SocketRequest req = new SocketRequest(loggedInUser, RequestType.ADD_CONSULTATION_DETAILS, consultation, false);
-		SocketRequest response = ComunicationService.getInstance().sendRequest(req);
+		ComunicationService.getInstance().sendRequest(req);
 	}
 	
-	public void getAllConsultationsForPacient(Pacient pacient){
-		
+	public List<Consultation> getAllConsultationsForPacient(User loggedInUser, Pacient pacient){
+		SocketRequest req = new SocketRequest(loggedInUser, RequestType.GET_ALL_CONSULTATIONS_PACIENT, pacient, true);
+		SocketRequest response = ComunicationService.getInstance().sendRequest(req);
+		return (List<Consultation>) response.getParameter();
 	}
 	
 	public List<Pacient> getAllPatients(User loggedInUser){
-		SocketRequest req = new SocketRequest(loggedInUser, RequestType.GET_ALL_PACIENTI, null, true);
+		SocketRequest req = new SocketRequest(loggedInUser, RequestType.GET_ALL_PACIENTI_FOR_DOCTOR, null, true);
 		SocketRequest response = ComunicationService.getInstance().sendRequest(req);
 		return (List<Pacient>) response.getParameter();
 	}
