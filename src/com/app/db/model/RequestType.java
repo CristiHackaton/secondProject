@@ -14,6 +14,7 @@ public class RequestType {
 	public static final String DELETE_CONSULTATION = "deleteConsultation";
 	public static final String UPDATE_CONSULTATION = "updateConsultation";
 	public static final String GET_ALL_CONSULTATIONS = "getAllConsultation";
+	public static final String GET_ALL_DOCTORS = "getAllDoctors";
 	public static String LOGIN = "login";
 	public static String GET_ALL_PACIENTI = "getAllPacienti";
 	public static String GET_ALL_PACIENTI_FOR_DOCTOR = "getAllPacientiForDoctor";

@@ -11,6 +11,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 
 import com.app.db.model.Consultation;
+import com.app.db.model.Doctor;
 import com.app.db.model.Pacient;
 import com.app.db.model.User;
 import com.app.service.SecretaryService;
@@ -44,23 +45,32 @@ public class SecretaryScreen extends JFrame{
 	private JTextField doctor;
 	private JList listConsult;
 	private JList listPatient;
+	private JList listDoc;
+	private JTextArea notes;
+	private JPanel panelConsultations;
+	private JPanel panelPatient;
+	private JButton btnSchedule;
 	private int id;
 	private boolean isNew=false;
+	private Pacient selectedPacient;
 	public SecretaryScreen(User user) {
 		
 		secretServ=new SecretaryService();
+	
 		setTitle("Secretary");
 		getContentPane().setBounds(new Rectangle(10, 10, 770, 1777));
 		getContentPane().setLayout(null);
+		this.setVisible(true);
+	
 		
-		JPanel panelConsultations = new JPanel();
-		panelConsultations.setBounds(10, 10, 365, 301);
+		panelConsultations = new JPanel();
+		panelConsultations.setBounds(15, 15, 365, 301);
 		getContentPane().add(panelConsultations);
 		panelConsultations.setLayout(null);
 		
-		JLabel lblNa = new JLabel("Patient");
-		lblNa.setBounds(10, 22, 46, 14);
-		panelConsultations.add(lblNa);
+		JLabel lblName = new JLabel("Patient");
+		lblName.setBounds(10, 22, 46, 14);
+		panelConsultations.add(lblName);
 		
 		JLabel lblDuration = new JLabel("Duration");
 		lblDuration.setBounds(10, 73, 46, 14);
@@ -98,7 +108,7 @@ public class SecretaryScreen extends JFrame{
 		lblNewLabel.setBounds(10, 158, 46, 14);
 		panelConsultations.add(lblNewLabel);
 		
-		JTextArea notes = new JTextArea();
+		notes = new JTextArea();
 		notes.setBounds(84, 148, 109, 64);
 		panelConsultations.add(notes);
 		
@@ -110,10 +120,22 @@ public class SecretaryScreen extends JFrame{
 		scrollPaneCons.setBounds(341, 22, 96, 164);
 		panelConsultations.add(scrollPaneCons);
 		
+		listDoc= new JList(new DoctorListModel(secretServ.getAllDoctors(loggedUser)));
+
+		listDoc.setBounds(341, 22, 96, 164);
+		
+		JScrollPane scrollPaneDoc = new JScrollPane(listDoc);
+		scrollPaneDoc.setBounds(341, 22, 96, 164);
+		panelConsultations.add(scrollPaneCons);
+		
+		
+		
 		
 		/////////////**************************************************/////////////////////
-		JPanel panelPatient = new JPanel();
-		panelPatient.setBounds(0, 0, 365, 251);
+		
+		
+		panelPatient = new JPanel();
+		panelPatient.setBounds(15, 15, 365, 251);
 		getContentPane().add(panelPatient);
 		panelPatient.setLayout(null);
 		
@@ -121,9 +143,9 @@ public class SecretaryScreen extends JFrame{
 		lblCnp.setBounds(10, 86, 46, 14);
 		panelPatient.add(lblCnp);
 		
-		JLabel lblName = new JLabel("Name");
-		lblName.setBounds(10, 59, 46, 14);
-		panelPatient.add(lblName);
+		JLabel lblNume = new JLabel("Name");
+		lblNume.setBounds(10, 59, 46, 14);
+		panelPatient.add(lblNume);
 		
 		JLabel lblDateOfBirth = new JLabel("Date of Birth");
 		lblDateOfBirth.setBounds(10, 111, 61, 14);
@@ -170,13 +192,15 @@ public class SecretaryScreen extends JFrame{
 		scrollPanePatient.setBounds(346, 171, 89, 158);
 		panelPatient.add(scrollPanePatient);
 		
-		JButton btnSchedule = new JButton("Schedule");
+		btnSchedule = new JButton("Schedule");
 		btnSchedule.setBounds(224, 18, 89, 23);
 		panelPatient.add(btnSchedule);
 		
 		
 		JMenuBar menuBar = new JMenuBar();
 		setJMenuBar(menuBar);
+		menuBar.setVisible(true);
+		
 		///////////**********Menu Patients******************/////////////////////
 		JMenu mnPatients = new JMenu("Patients");
 		menuBar.add(mnPatients);
@@ -198,9 +222,13 @@ public class SecretaryScreen extends JFrame{
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				// TODO Auto-generated method stub
-				Pacient p=new Pacient();
+				isNew=true;
+				namePatient.setText("");
+				cnp.setText("");
+				idCard.setText("");
+				birth.setText("");
+				adress.setText("");
 				
-				namePatient.getText();
 			}
 		});
 		mntmViewAllPat.addActionListener(new ActionListener() {
@@ -249,8 +277,26 @@ public class SecretaryScreen extends JFrame{
 				p.setAddress(adress.getText());
 				p.setBirth(date);
 				p.setCnp(cnp.getText());
+				p.setIdentitiCard(idCard.getText());
+				p.setName(namePatient.getText());
 				
+				if(isNew){
+					secretServ.addPaticient(loggedUser, p);
+				}else {p.setId(id);
+					secretServ.updatePacient(loggedUser, p);
+				}
+			btnSchedule.addActionListener(new ActionListener() {
+				
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					// TODO Auto-generated method stub
+					selectedPacient=(Pacient) listPatient.getSelectedValue();
+					panelPatient.setVisible(false);
+					panelConsultations.setVisible(true);
+				}
+			});	
 			}
+			
 		});
 		///////////************Menu Consultations******************///////////////////
 		
@@ -279,9 +325,90 @@ public class SecretaryScreen extends JFrame{
 		mnOptions.add(mntmLogOut);
 		loggedUser = user;
 		/////////////*******************************/////////////////
-		
-		
+		mntmViewAllCons.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				// TODO Auto-generated method stub
+				listConsult.setVisible(true);
+				
+			}
+		});
+		mntmCreate.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				// TODO Auto-generated method stub
+				isNew=true;
+				patient.setText("");
+				date.setText("");
+				duration.setText("");
+				doctor.setText("");
+				notes.setText("");
+				
+			}
+		});
+		mntmDelete.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				// TODO Auto-generated method stub
+				cons=(Consultation) listConsult.getSelectedValue();
+				secretServ.deleteConsultation(loggedUser, cons);
+			}
+		});
+		mntmSave_1.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				listDoc.setVisible(true);
+				Consultation c=new Consultation();
+				SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd");
+				Date date=null;
+				try {
+					date = DATE_FORMAT.parse(birth.getText());
+				} catch (ParseException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+				c.setPacient(selectedPacient); 
+				c.setDuration(Float.parseFloat(duration.getText()));
+				c.setConsultationDate(date);
+				c.setDoctor((Doctor) listDoc.getSelectedValue());
+				c.setNotes(notes.getText());
+				
+				
+				cleanAndRedraw();
+			}
+
+				
+			
+		});
+		mntmLogOut.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				// TODO Auto-generated method stub
+				getContentPane().setVisible(false);
+				LoginScreen log=new LoginScreen();
+				log.setVisible(true);
+				cleanAndRedraw();
+			}
+		});
 	}
+	private void cleanAndRedraw() {
+		getContentPane().setVisible(false);
+		getContentPane().repaint();
+		getContentPane().revalidate();
+
+	
+		//initComponents(loggedUser);
+		//refreshPage();		
+		getContentPane().setVisible(true);
+
+}
+
 
 	public void setLoggedUser(User user) {
 		this.loggedUser = user;

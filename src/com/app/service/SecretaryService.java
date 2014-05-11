@@ -3,6 +3,7 @@ package com.app.service;
 import java.util.List;
 
 import com.app.db.model.Consultation;
+import com.app.db.model.Doctor;
 import com.app.db.model.Pacient;
 import com.app.db.model.RequestType;
 import com.app.db.model.SocketRequest;
@@ -46,4 +47,10 @@ public class SecretaryService extends GeneralService{
 		SocketRequest resp = ComunicationService.getInstance().sendRequest(req);
 		return (List<Pacient>) resp.getParameter();		
 	}
+	public List<Doctor> getAllDoctors(User loggedUser){
+		SocketRequest req = new SocketRequest(loggedUser, RequestType.GET_ALL_DOCTORS, null, true);
+		SocketRequest resp = ComunicationService.getInstance().sendRequest(req);
+		return (List<Doctor>) resp.getParameter();
+	}
+	
 }
