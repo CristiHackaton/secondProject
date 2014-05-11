@@ -7,7 +7,7 @@ public class Consultation implements Model {
     private float duration;
     private int id;
     private Pacient pacient;
-    private Doctor doctor;
+    private User doctor;
     private String notes;
 
     public Consultation() {
@@ -46,11 +46,11 @@ public class Consultation implements Model {
         this.pacient = pacient;
     }
 
-    public Doctor getDoctor() {
+    public User getDoctor() {
         return doctor;
     }
 
-    public void setDoctor(final Doctor doctor) {
+    public void setDoctor(final User doctor) {
         this.doctor = doctor;
     }
 

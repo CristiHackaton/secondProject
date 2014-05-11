@@ -144,11 +144,11 @@ public class AdminScreen extends JFrame{
 				password.setText(u.getPassword());
 				email.setText(u.getEmail());
 				if(u.isAdmin()){
-					radioAdmin.isSelected();
+					radioAdmin.setSelected(true);
 				}else if(u.isDoctor()){
-					radioDoctor.isSelected();
+					radioDoctor.setSelected(true);
 				}else if(u.isSecretary()){
-					radioSecretary.isSelected();
+					radioSecretary.setSelected(true);
 				}
 				isNew=false;
 				id=u.getUserID();
