@@ -20,7 +20,7 @@ public class DoctorService extends GeneralService{
 		return (List<Consultation>) response.getParameter();
 	}
 	
-	public List<Pacient> getAllPatients(User loggedInUser){
+	public List<Pacient> getAllPatientsForDoctor(User loggedInUser){
 		SocketRequest req = new SocketRequest(loggedInUser, RequestType.GET_ALL_PACIENTI_FOR_DOCTOR, null, true);
 		SocketRequest response = ComunicationService.getInstance().sendRequest(req);
 		return (List<Pacient>) response.getParameter();
