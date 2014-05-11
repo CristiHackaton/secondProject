@@ -14,6 +14,10 @@ import com.app.service.DoctorService;
 import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 import javax.swing.JTextField;
 import javax.swing.JTextPane;
 import javax.swing.JLabel;
@@ -32,6 +36,8 @@ public class DoctorScreen extends JFrame {
 	private JScrollPane consultScrollPane;
 	private JScrollPane pacientiScrollPane;
 	private JTextPane notesPane;
+	private JButton btnSave;
+	private JButton btnEditConsultation;
 
 	public DoctorScreen(User user) {
 		loggedUser = user;
@@ -44,7 +50,7 @@ public class DoctorScreen extends JFrame {
 		getContentPane().add(panelVizualizare);
 		panelVizualizare.setLayout(null);
 		
-		JButton btnEditConsultation = new JButton("Edit consultation");
+		btnEditConsultation = new JButton("Edit consultation");
 		btnEditConsultation.setBounds(409, 45, 154, 23);
 		panelVizualizare.add(btnEditConsultation);
 		
@@ -54,13 +60,43 @@ public class DoctorScreen extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				Consultation c = (Consultation) consultationsList.getSelectedValue();
 				durationTextField.setText("" + c.getDuration());
+				notesPane.setText(c.getNotes());
 				
+				SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd");
+				String date = DATE_FORMAT.format(c.getConsultationDate());
+				dateTextField.setText(date);
+				btnSave.setEnabled(true);
 			}
 		});
 		
-		JButton btnSave = new JButton("Save");
+		btnSave = new JButton("Save");
 		btnSave.setBounds(409, 79, 154, 23);
 		panelVizualizare.add(btnSave);
+		btnSave.setEnabled(false);
+		btnSave.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				Consultation c = (Consultation) consultationsList.getSelectedValue();
+				c.setNotes(notesPane.getText());
+				c.setDuration(Float.parseFloat(durationTextField.getText()));
+				
+				SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd");
+				Date date;
+				try {
+					date = DATE_FORMAT.parse(dateTextField.getText());
+					c.setConsultationDate(date);
+				} catch (ParseException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+				
+				docService.addConsultationDetails(loggedUser, c);
+				dateTextField.setText("");
+				durationTextField.setText("");
+				notesPane.setText("");
+			}
+		});
 		
 		durationTextField = new JTextField();
 		durationTextField.setBounds(124, 247, 154, 20);
@@ -128,12 +164,5 @@ public class DoctorScreen extends JFrame {
 	public void setLoggedUser(User user) {
 		this.loggedUser = user;
 
-	}
-
-	public static void main(String args[]) {
-		User u = new User();
-		u.setUserID(2);
-		DoctorScreen scr = new DoctorScreen(u);
-		scr.setVisible(true);
 	}
 }

@@ -61,4 +61,7 @@ public class Pacient implements Model {
     public void setAddress(final String address) {
         this.address = address;
     }
+    public String toString(){
+    	return name;
+    }
 }

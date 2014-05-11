@@ -9,7 +9,7 @@ import com.app.db.model.SocketRequest;
 import com.app.db.model.User;
 
 public class DoctorService extends GeneralService{
-	public void addConsultation(User loggedInUser,Consultation consultation){
+	public void addConsultationDetails(User loggedInUser,Consultation consultation){
 		SocketRequest req = new SocketRequest(loggedInUser, RequestType.ADD_CONSULTATION_DETAILS, consultation, false);
 		ComunicationService.getInstance().sendRequest(req);
 	}

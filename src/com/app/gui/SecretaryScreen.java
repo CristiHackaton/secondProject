@@ -420,6 +420,13 @@ public class SecretaryScreen extends JFrame{
 		this.loggedUser = user;
 		secretServ=new SecretaryService();
 	}
+	public static void main(String args[]) {
+		User u = new User();
+		u.setUserID(3);
+		u.setUsername("aaaa");
+		SecretaryScreen scr = new SecretaryScreen(u);
+		scr.setVisible(true);
+	}
 }
 	
 
